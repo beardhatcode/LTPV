@@ -35,7 +35,7 @@ function die(msg) {
 	throw new Error(msg);
 }
 
-function createColors() {
+function createColors(amount) {
 	// Create array containing colors
 	var i = 0;
 
@@ -51,8 +51,8 @@ function createColors() {
 	colors[i++] = [     'violet', [123,   0, 235],  [ 50,   0, 100], [142,   0, 255], 'black'];
 	colors[i++] = [ 'chartreuse', [107, 235,   0],  [ 50, 100,   0], [127, 255,   0], 'black'];
 	colors[i++] = [     'orange', [235, 107,   0],  [100,  50,   0], [255, 127,   0], 'black'];
-	
-	for(i=i; i < 50; i++) { // Creating even more colors
+    console.log("creating colorts", amount)
+	for(i=i; i < amount; i++) { // Creating even more colors
 		vec=[Math.round(Math.random()*105+150), Math.round(Math.random()*85+150), Math.round(Math.random()*105+150)];
 		colors[i]=['noname', vec, [vec[0]-120, vec[1]-120, vec[2]-120], [vec[0]+20, vec[1]+20, vec[2]+20], 'black'];
 		// Try to put the text in white when required
@@ -68,10 +68,10 @@ function colorize(obj, p, color, text) {
 	// obj: HTML object to colorize (=one task)
 	// color: index from colors[]
 	// text: text to write above
-	
-	
+
+
 	//$('#'+obj).html('<canvas id="canvas-'+obj+'" style="position:absolute;background-color:green; padding:0px;margin:0px;top:0px;left:0px;" height="'+$('#'+obj).css('height')+'" width="'+$('#'+obj).css('width')+'" onMouseOver="colorize(\''+obj+'\', 4, '+color+', \''+text+'\');" onMouseOut="colorize(\''+obj+'\', 2, '+color+', \''+text+'\');"></canvas>');
-	
+
 	if(color==undefined) color=0;
 
 	var width = Math.round($('#'+obj+'').width());
@@ -84,11 +84,11 @@ function colorize(obj, p, color, text) {
 	canvas.width  = width;
 	canvas.height = height;
 	var ctx = canvas.getContext('2d');
-	
-	
 
 
-	
+
+
+
 	var c1=colors[color][1];
 	var c2=colors[color][2];
 	if(p>2) c1=colors[color][3];
@@ -203,7 +203,7 @@ function createTaskInstances() {
 				//width = Math.round(end-begin);
 				b=$("#timelineStreams").offset().top+15;
 				color=colors[task[1]][1];
-				
+
 				color='rgb('+Math.round(color[0]/2)+', '+Math.round(color[1]/2)+', '+Math.round(color[2]/2)+')';
 				timelineStreamsAppend += '<canvas id="taskInstance-'+idStream+'-'+i+'" class="taskInstance" style="position:absolute;height:'+streamHeight+'px;top:'+top+'px;border:1px black solid;" onMouseOver=\'\' title="" width="2" height="2"></canvas>\
 				<script>\
@@ -257,14 +257,14 @@ function refreshTaskInstances() {
 			var streamLength = streams[idStream].length;
 			if(streams[idStream]!=undefined) for(var i = 0; i < streamLength; i++) {
 				task = tasks[streams[idStream][i][0]];
-		
+
 				var begin  = streams[idStream][i][2];
 				var end = streams[idStream][i][3];
 				if((begin > wLeft && begin < wRight) || (end > wLeft && end < wRight) || (begin < wLeft && end > wRight)) {
 					$('#taskInstance-'+idStream+'-'+i+'').css('display', 'block');
 
 					var left = parseInt((begin-wLeft)/(wRight-wLeft)*timelineWidth);
-				
+
 					var cutL = 0;
 					if(left < 0) {
 						cutL = -left;
@@ -371,7 +371,7 @@ function changeView2(choice) {
 		}
 		if(wLeftL != wLeft || wRightL != wRight) refreshScreen();
 		window.setTimeout("changeViewRequests = 0; changeView2("+choice+");", 200);
-		
+
 	}
 }
 
@@ -380,12 +380,12 @@ function createScreen() {
 	var p1 = parseInt($("#timelineTitles").css('padding-left'))+parseInt($("#timelineTitles").css('padding-right'));
 	var p2 = parseInt($("#timelineTitles").css('padding-top'))+parseInt($("#timelineTitles").css('padding-bottom'));
 	l = $("#timelineTitles").offset().left + $("#timelineTitles").width() + p1;
-	
+
 	$('#timelineStreams').css('left', l);
 	$('#timelineStreams').css('top', $("#timelineTitles").offset().top);
 	$('#timelineStreams').css('width', $("#timeline").width()-($("#timelineTitles").width()+p1));
 	$('#timelineStreams').css('height', $("#timelineTitles").height()+p2);
-	
+
 	timelineWidth = parseInt($('#timelineStreams').css('width'));
 	timelineHeight = parseInt($('#timelineStreams').css('height'));
 	$("#timelineStreams").html('<canvas id="canvasBackground" style="width:'+(timelineWidth)+'px;height:'+timelineHeight+'px;" width="'+timelineWidth+'px" height="'+timelineHeight+'px" onContextMenu="changeView(1);return false;"></canvas>');// onClick="changeView(2);"
@@ -403,13 +403,13 @@ function refreshCanvasBackground() {
 	ctx.fillStyle = "rgb(0, 0, 0)";
 	ctx.clearRect(0, 0, timelineWidth, timelineHeight);
 	ctx.fillRect(0, 15, timelineWidth, 1);
-	
+
 	var pas = 0.001;
 	var diff=wRight-wLeft;
 	while(diff/pas > 50) {
 		pas*=10;
 	}
-	
+
 	scaleMin = pas*Math.ceil(wLeft/pas);
 	scaleMax = pas*Math.ceil(wRight/pas);
 	var N = (scaleMax-scaleMin)/pas;
@@ -431,7 +431,7 @@ function refreshCanvasBackground() {
 			ctx.fillRect(off, 15, 1, timelineHeight);
 		}
 	}
-	
+
 	// A and B
 	if(cursor[0]!=NaN) {
 		var h=15;
@@ -470,13 +470,13 @@ function refreshCanvasBackground() {
 				ctx.font = 'bold 14px Arial';
 				ctx.textAlign = 'center';
 				ctx.fillText(Name, Xv+w/2+posR, offsetY+h-2);
-			
+
 				ctx.fillStyle = "rgb(120,0,0)";
 				ctx.fillRect(Xv-aLeft*w/2+posR+aRight*(w+aLeft*w/2+aRight*w/2), offsetY, 1, timelineHeight-offsetY);
 			}
 		}
 	}
-	
+
 	// Q and S (ocl_queued and ocl_submit)
 	if(ocl_queuedSubmit[0]!=undefined && advanced==1 && ocl_queuedSubmit[0]!="") {
 		var h=15;
@@ -515,13 +515,13 @@ function refreshCanvasBackground() {
 				ctx.font = 'bold 14px Arial';
 				ctx.textAlign = 'center';
 				ctx.fillText(Name, Xv+w/2+posR, offsetY+h-2);
-			
+
 				ctx.fillStyle = "rgb(0,0,120)";
 				ctx.fillRect(Xv-aLeft*w/2+posR+aRight*(w+aLeft*w/2+aRight*w/2), offsetY, 1, timelineHeight-offsetY);
 			}
 		}
 	}
-	
+
 	// Scroll bar
 	var w = parseInt((wRight-wLeft)/(max-min)*timelineWidth);
 	var l = parseInt((wLeft-min)/(max-min)*timelineWidth);
@@ -559,7 +559,7 @@ function createRAW() { // Fill the raw div with profiling informations
 	unit=$xml.children('profiling').children('head').children('unit').text();
 	if(unit=='') unit='undefined';
 	output+='time unit: <strong>'+unit+'</strong><br />';
-	
+
 	// Instanciated tasks
 	output+='<table class="sortable" id="tabAdvanced"><thead><tr><th>task name</th><th>Instanciation name</th><th>stream</th><th class="sorttable_numeric" id="queuedAdvanced">(OpenCL)queued</th><th class="sorttable_numeric">(OpenCL)submit</th><th class="sorttable_numeric">start</th><th class="sorttable_numeric">end</th><th>(OpenCL)global work size</th><th>(OpenCL)local work size</th><th class="sorttable_numeric">bandwidth (MiB/s)</th><th class="sorttable_numeric">size (bytes)</th><th>size</th></tr></thead><tbody>';
 	var tabTaskName = [];
@@ -569,7 +569,7 @@ function createRAW() { // Fill the raw div with profiling informations
 		if(name=='') name='<span style="color:#303030">N/A</span>';
 		tabTaskName[id] = name;
 	});
-	
+
 	// Devices
 	$xml.find('device').each(function() {
 		var device=$(this).children('name').text();
@@ -585,19 +585,19 @@ function createRAW() { // Fill the raw div with profiling informations
 				style=[];
 				colorAdvanced1[Id]=color1;
 				colorAdvanced2[Id]=color2;
-				
+
 				output+='<tr id="id_'+Id+'">';
-				
-				
+
+
 				var taskInstanceName = $(this).children('name').text();
-				
+
 				var start=$(this).children('start').text();
 				var end  =$(this).children(  'end').text();
-				
+
 				var bandwidth=$(this).children('bandwidth').text();
 				if(bandwidth=='') bandwidth='<span style="color:#303030">N/A</span>';
 				//else bandwidth += 'MiB/s';
-				
+
 				var size1=$(this).children('size').text();
 				if(size1=='') {
 					size1='<span style="color:#303030">N/A</span>';
@@ -614,24 +614,24 @@ function createRAW() { // Fill the raw div with profiling informations
 					else
 						size2 = size1+'B';
 				}
-				
-				
-				
+
+
+
 				// Optionnal informations
 				var ocl_queued=$(this).children('ocl_queued').text();
 				if(ocl_queued=='') ocl_queued='<span style="color:#303030">N/A</span>';
 				var ocl_submit=$(this).children('ocl_submit').text();
 				if(ocl_queued=='') ocl_queued='<span style="color:#303030">N/A</span>';
-				
-				
+
+
 				var gws=$(this).children('ocl_global_work_size').text();
 				if(gws=='') gws='<span style="color:#303030">N/A</span>';
 				else gws='['+gws+']';
-				
+
 				var lws=$(this).children('ocl_local_work_size').text();
 				if(lws=='') lws='<span style="color:#303030">N/A</span>';
 				else lws='['+lws+']';
-				
+
 				//var i=0;
 				output+='<td class="td1">'+tabTaskName[Id]+'</td>';
 				output+='<td class="td2">'+taskInstanceName+'</td>';
@@ -658,14 +658,14 @@ function createRAW() { // Fill the raw div with profiling informations
 	sorttable.makeSortable(a);
 	//var a= document.getElementById("ocl_queuedAdvanced"); sorttable.innerSortFunction.apply(a, []);
 
-	
+
 	//var myTH = document.getElementsByTagName("th")[0];
 	//sorttable.innerSortFunction.apply(myTH, []);
-	
+
 	showAdvanced();
 }
 
-function getTime(){ 
+function getTime(){
 	var myDate = new Date();
 	var time = myDate.getTime();
 	var hour = myDate.getHours();
@@ -674,12 +674,12 @@ function getTime(){
 	var date = myDate.getDate();
 	var dayT = ['Sunday', 'Monday', 'Thursday', 'Wednesday', 'Tuesday', 'Friday', 'Saturday'];
 	var monthT = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-	
-	
-	if (hour < 10) { hour = "0" + hour; } 
-	if (minute < 10) { minute = "0" + minute; } 
-	if (second < 10) { second = "0" + second; } 
-	if (date < 10) { date = "0" + date; } 
-	var theDate = dayT[myDate.getDay()]+", "+monthT[myDate.getMonth()]+" "+date+"<sup>th</sup> "+myDate.getFullYear()+" at <b>"+ hour + ":" + minute + ":" + second+"</b>"; 
+
+
+	if (hour < 10) { hour = "0" + hour; }
+	if (minute < 10) { minute = "0" + minute; }
+	if (second < 10) { second = "0" + second; }
+	if (date < 10) { date = "0" + date; }
+	var theDate = dayT[myDate.getDay()]+", "+monthT[myDate.getMonth()]+" "+date+"<sup>th</sup> "+myDate.getFullYear()+" at <b>"+ hour + ":" + minute + ":" + second+"</b>";
 	return theDate;
 }

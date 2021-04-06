@@ -28,10 +28,8 @@ Until now, this project was only used on Unix platform. Any help to make this pr
 * Open a terminal in ltpv/:
 
 ```
-    cd ltpv/
-    ./waf configure -m release
-    ./waf
-    sudo ./waf install
+    cd ltpv/src
+    make
 ```
 the library will be installed in /usr/local/ folder.
 
@@ -44,14 +42,10 @@ Usage
 
 
 Since LTPV overwrite OpenCL function calls,
-you have nothing particular to do appart launching your program with : 
+you have nothing particular to do appart launching your program with :
 
 ```bash
-ltpv ./my_gpu_program # this version will launch firefox when your program ends
-```
-or
-```bash
-LD_PRELOAD=/path/to/libltpv.so ./my_gpu_program
+LD_PRELOAD=/path/to/src/libltpv.so ./my_gpu_program
 ```
 
 ### Profile CPU functions
@@ -68,7 +62,7 @@ Now, you can track CPU function by surrounding your code with:
 ```c
 LTPV(my_function_to_track());
 ```
-or 
+or
 ```c
 LTPV(my_function_to_track(), "My GPU function");
 ```
@@ -119,11 +113,24 @@ License
 
 This project is under GNU LGPL 2.1 See LICENSE for more information.
 
-Contributor 
+Contributor
 -----------
 (Alphabetic order)
 
 * Simon Denel (Thales SA)
 * ixeft
+* Robbert Gurdeep Singh
 
 You can contact us by filling in a new issue ! (nobody bites ;) )
+
+
+LICENCE
+-------
+
+See LICENCE (GNU LESSER GENERAL PUBLIC LICENSE)
+
+Quick and dirty changes in this version:
+
+- Load files via input field,
+- do away with waf files
+- create enough colours

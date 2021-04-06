@@ -1,5 +1,6 @@
-# WARNING! The new version of this file was NOT tested!
-all:
-	g++ -std=c++11 -shared -o libLTPV.so -fPIC init.cc common.cc opencl-hook.cc -lOpenCL
+files := $(wildcard *.cc)
+
+all: $(files)
+	g++ -O3 -DNDEBUG=1 -Wall -Wextra -std=c++11 -shared -o libLTPV.so -fPIC $(files) -lOpenCL
 clean:
 	rm -f libLTPV.so
